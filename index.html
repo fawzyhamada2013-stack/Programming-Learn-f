@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة Programming Learn</title>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #34a853;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #202124;
+            --border-color: #dadce0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 40px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* العناوين والأزرار */
+        h1 { color: var(--primary-color); margin-bottom: 20px; font-size: 28px; }
+        h2 { color: var(--text-color); margin-bottom: 15px; font-size: 22px; }
+        p { margin-bottom: 25px; line-height: 1.6; color: #5f6368; }
+        
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn:hover { background-color: #1557b0; }
+
+        /* الشاشة الأولى: الترحيب */
+        #welcome-screen {
+            background: linear-gradient(135deg, #f1f3f4 0%, #e8f0fe 100%);
+        }
+
+        /* الشاشة الثانية: التسجيل */
+        .input-group {
+            margin-bottom: 25px;
+        }
+        .input-group input {
+            width: 80%;
+            max-width: 300px;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+        }
+        .input-group input:focus { border-color: var(--primary-color); }
+
+        /* الشاشة الثالثة: الأقسام */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        .card {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border-color: var(--primary-color);
+        }
+
+        /* مستويات التعليم */
+        .level-box {
+            background: #f1f3f4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: right;
+            border-right: 4px solid var(--primary-color);
+        }
+
+        /* الشهادة المبهورة */
+        .certificate-box {
+            border: 8px double var(--primary-color);
+            padding: 30px;
+            background: #fffdf9;
+            margin: 20px 0;
+            position: relative;
+        }
+        .cert-header { font-size: 24px; font-weight: bold; color: var(--primary-color); margin-bottom: 20px; }
+        .cert-user { font-size: 22px; font-weight: bold; margin: 15px 0; text-decoration: underline; }
+        .cert-msg { font-style: italic; color: var(--secondary-color); font-weight: bold; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div id="welcome-screen" class="screen active">
+        <h1>Programming Learn</h1>
+        <p>مرحباً بك في المنصة التعليمية البرمجية الأكثر تميزاً. هنا تبني مستقبلك البرمجي بخطوات ثابتة واحترافية واقعية من الصفر.</p>
+        <button class="btn" onclick="nextScreen('register-screen')">أكمل</button>
+    </div>
+
+    <div id="register-screen" class="screen">
+        <h2>أهلاً بك معنا!</h2>
+        <p>الرجاء كتابة اسمك لتخصيص تجربتك التعليمية وإصدار شهاداتك بدقة:</p>
+        <div class="input-group">
+            <input type="text" id="username" placeholder="سجل اسمك هنا..." required>
+        </div>
+        <button class="btn" onclick="saveName()">تأكيد ودخول</button>
+    </div>
+
+    <div id="dashboard-screen" class="screen">
+        <h2>لوحة التحكم الرئيسية</h2>
+        <p>مرحباً <span id="display-name" style="font-weight:bold; color:var(--primary-color);"></span>، اختر مسارك التعليمي لبدء الرحلة:</p>
+        <div class="grid-container">
+            <div class="card" onclick="openLanguage('HTML')"><h3>لغة HTML</h3></div>
+            <div class="card" onclick="openLanguage('CSS')"><h3>لغة CSS</h3></div>
+            <div class="card" onclick="openLanguage('JS')"><h3>لغة JavaScript</h3></div>
+            <div class="card" onclick="openLanguage('Projects')"><h3>المشاريع التطبيقية</h3></div>
+        </div>
+    </div>
+
+    <div id="language-screen" class="screen">
+        <h1 id="lang-title">اسم اللغة</h1>
+        <p id="lang-desc">شرح واقعي وتطبيقي للغة في سوق العمل الحقيقي...</p>
+        
+        <div id="levels-container">
+            </div>
+        <button class="btn" onclick="nextScreen('dashboard-screen')">عودة للأقسام</button>
+    </div>
+
+    <div id="quiz-screen" class="screen">
+        <h2 id="quiz-title">المستوى</h2>
+        <div class="level-box">
+            <h3>صفحة شرح ما قبل الأسئلة (مفاهيم واقعية):</h3>
+            <p id="quiz-study-material">هنا يتم شرح الأكواد البرمجية والمفاهيم بطريقة واقعية وتطبيقية لتأهيلك للاختبار بشكل ممتاز وبدون أخطاء.</p>
+        </div>
+        <p style="font-weight: bold; color: var(--primary-color);" id="question-count-text">يحتوي هذا الاختبار على X أسئلة موضوعية.</p>
+        <button class="btn" onclick="showCertificate()">اجتياز الاختبار وحصد الشهادة</button>
+    </div>
+
+    <div id="cert-screen" class="screen">
+        <div class="certificate-box">
+            <div class="cert-header">Programming Learn</div>
+            <p>شـهـادة اجـتـيـاز ومـواظـبـة</p>
+            <div class="cert-user" id="cert-username">اسم المستخدم</div>
+            <p>لقد نجح في اجتياز متطلبات واختبار مسار: <br><strong id="cert-details" style="color: black;"></strong></p>
+            <div class="cert-msg" id="cert-motivation">رسالة الحماس التلقائية هنا...</div>
+        </div>
+        <button class="btn" id="cert-action-btn" onclick="nextScreen('language-screen')">التالي</button>
+    </div>
+
+    <script>
+        let currentUsername = "";
+        let currentLang = "";
+        let currentLevel = 1;
+
+        function nextScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function saveName() {
+            const nameInput = document.getElementById('username').value.trim();
+            if(nameInput === "") {
+                alert("الرجاء تسجيل اسمك أولاً.");
+                return;
+            }
+            currentUsername = nameInput;
+            document.getElementById('display-name').innerText = currentUsername;
+            nextScreen('dashboard-screen');
+        }
+
+        function openLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('lang-title').innerText = `مسار تعليم لغة ${lang}`;
+            
+            let desc = "";
+            if(lang === 'HTML') desc = "صفحة شرح واقعية لـ HTML: هي لغة الهيكلة الأساسية لكل موقع إنترنت في العالم وبدونها لا وجود للويب.";
+            if(lang === 'CSS') desc = "صفحة شرح واقعية لـ CSS: هي المسؤول الأول عن المظهر الجمالي والألوان والتنسيق والتجاوب مع الهواتف.";
+            if(lang === 'JS') desc = "صفحة شرح واقعية لـ JavaScript: لغة البرمجة التي تمنح الحياة والمصداقية والتفاعل للموقع.";
+            if(lang === 'Projects') desc = "صفحة التطبيقات الحقيقية: دمج اللغات الثلاث لبناء مشاريع واقعية متكاملة للعملاء.";
+            
+            document.getElementById('lang-desc').innerText = desc;
+
+            // توليد الـ 11 ليفل
+            let htmlLevels = "";
+            for(let i=1; i<=11; i++) {
+                htmlLevels += `
+                    <div class="level-box" style="display:flex; justify-content:space-between; align-items:center;">
+                        <span>المستوى ${i} ${i === 11 ? '(مستوى التخرج النهائي)' : ''}</span>
+                        <button class="btn" style="padding:5px 15px; font-size:14px;" onclick="startLevel(${i})">ابدأ ليفل ${i}</button>
+                    </div>
+                `;
+            }
+            document.getElementById('levels-container').innerHTML = htmlLevels;
+            nextScreen('language-screen');
+        }
+
+        function startLevel(levelNum) {
+            currentLevel = levelNum;
+            document.getElementById('quiz-title').innerText = `اختبار لغة ${currentLang} - المستوى ${levelNum}`;
+            
+            let qCount = (levelNum === 11) ? 20 : 10;
+            document.getElementById('question-count-text').innerText = `يحتوي هذا الاختبار على ${qCount} سؤالاً قياسياً وواقعياً بشكل كامل.`;
+            nextScreen('quiz-screen');
+        }
+
+        function showCertificate() {
+            document.getElementById('cert-username').innerText = currentUsername;
+            document.getElementById('cert-details').innerText = `لغة ${currentLang} - المستوى (${currentLevel})`;
+            
+            let motivation = "";
+            if(currentLevel === 11) {
+                motivation = "مبارك التخرج والاتقان الكامل! لقد أنهيت ليفل 11 الشامل بنجاح باهر واستحققت اللقب!";
+                document.getElementById('cert-action-btn').setAttribute("onclick", "nextScreen('dashboard-screen')");
+                document.getElementById('cert-action-btn').innerText = "العودة للوحة الأقسام الرئيسية";
+            } else {
+                motivation = `عمل رائع وعزيمة من حديد! مستواك يتطور بصورة مذهلة، ليفل ${currentLevel + 1} بانتظارك الآن لتثبت مهاراتك.. انطلق بقوة!`;
+                document.getElementById('cert-action-btn').setAttribute("onclick", "nextScreen('language-screen')");
+                document.getElementById('cert-action-btn').innerText = `الانتقال إلى ليفل ${currentLevel + 1}`;
+            }
+            
+            document.getElementById('cert-motivation').innerText = motivation;
+            nextScreen('cert-screen');
+        }
+    </script>
+</body>
+</html>
